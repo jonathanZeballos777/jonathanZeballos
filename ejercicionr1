@@ -1,0 +1,96 @@
+public class ejercicio1{
+    public boolean sePuede(){
+        char tabla[][] =
+                {
+                    {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#'}, 
+                    {'#',' ',' ',' ','#',' ',' ',' ','#','#',' ','#','#',' ',' ','#',' ',' ','#',' ',' ',' '},
+                    {'#',' ','#',' ',' ',' ','#',' ',' ',' ',' ',' ',' ',' ','#','#','#',' ','#',' ','#','#'},
+                    {'#',' ','#',' ','#',' ',' ','#','#',' ',' ','#','#','#','#',' ',' ',' ','#',' ','#','#'},
+                    {'#','#','#',' ','#','#','#','#','#','#',' ',' ',' ',' ','#','#','#',' ','#',' ',' ','#'},
+                    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#','#',' ',' ','#','#',' ',' ',' ',' ','#'},
+                    {'#','#','#','#','#',' ','#','#','#','#','#','#',' ',' ',' ','#','#','#','#','#',' ','#'},
+                    {'#',' ',' ',' ',' ',' ','#',' ',' ',' ','#','#','#','#','#','#','#',' ',' ','#',' ','#'},
+                    {'#',' ','#','#','#','#','#','#','#',' ',' ',' ',' ',' ',' ',' ',' ','#','#',' ',' ','#'},
+                    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#',' ','#','#','#'},
+                    {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#',' ','#','#','#'}   
+                };
+        int cat = cantMinimaPasos(tabla,0,0);
+        return true;
+       
+    }   
+    
+    private boolean sePuede(char tabla[][], int x, int y){
+        boolean res = false;
+        if(esValida(tabla, x, y)){
+            if(tabla[x][y]== '*'){
+                res = true;
+                imprimir(tabla);
+                System.out.println("43434543543543555555555555555555555555");
+            }else{
+                if(tabla[x][y] != '#' && tabla[x][y] != '$'){
+                    tabla[x][y] = '$';
+                    res = sePuede(tabla, x, y+1)||
+                          sePuede(tabla, x-1, y)||
+                          sePuede(tabla, x, y-1)||
+                          sePuede(tabla, x+1, y);
+                }
+            }
+        }
+        return res;
+    }
+    
+    private int cantCaminos(char tabla[][], int x, int y){
+        int cant = 0;
+        if(esValida(tabla, x, y)){
+            if(tabla[x][y] == '*'){
+                cant = 1;
+                imprimir (tabla);
+                System.out.println("43434543543543555555555555555555555555");
+            }else{
+                if(tabla[x][y] != '#' && tabla[x][y] != '$'){
+                    tabla[x][y] = '$';
+                    cant = cantCaminos(tabla, x, y+1)+
+                          cantCaminos(tabla, x-1, y)+
+                          cantCaminos(tabla, x, y-1)+
+                          cantCaminos(tabla, x+1, y);
+                    tabla[x][y] = ' ';
+                }
+            }
+        }
+        return cant;
+    }
+    
+    private int cantMinimaPasos(char tabla[][], int x, int y){
+        int cant = (int)1e6;
+        if(esValida(tabla, x, y)){
+            if(tabla[x][y] == '*'){
+            cant = 0;
+            imprimir(tabla);
+            System.out.println("43434543543543555555555555555555555555");
+        }else{
+                if(tabla[x][y] != '#' && tabla[x][y] != '$'){
+                    tabla[x][y] = '$';
+                    int rigth = 1 + cantMinimaPasos(tabla, x, y+1);
+                    int down  = 1 + cantMinimaPasos(tabla, x+1, y);
+                    int left  = 1 + cantMinimaPasos(tabla, x, y-1);
+                    int up    = 1 + cantMinimaPasos(tabla, x-1, y);
+                    tabla[x][y] = ' ';
+                    cant = Math.min(rigth, Math.min(down, Math.min(left, up)));
+                }
+            }
+        }
+        return cant;
+    }
+    
+    private boolean esValida(char tabla[][], int x, int y){
+        return x >= 0 && x < tabla.length && y >= 0 && y < tabla[x].length;
+    }
+    
+    private void imprimir(char[][] tabla){
+        for(int i = 0; i  < tabla.length; i++){
+            for(int j = 0; j  < tabla.length; j++)
+            System.out.print(tabla[i][j] + " ");
+        }
+        System.out.println();
+    }
+}
